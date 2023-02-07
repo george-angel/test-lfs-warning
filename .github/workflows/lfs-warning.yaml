@@ -1,0 +1,19 @@
+name: lfs-warning
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lfs-warning:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+      - name: lfs-warning
+        uses: actionsdesk/lfs-warning@v3.2
+        with:
+          filesizelimit: 100KB
