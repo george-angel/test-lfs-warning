@@ -8,9 +8,6 @@ on:
 jobs:
   lfs-warning:
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
 
     steps:
       - name: Checkout Repository
