@@ -20,4 +20,4 @@ jobs:
       - name: lfs-warning
         uses: actionsdesk/lfs-warning@v3.2
         with:
-          filesizelimit: 100KB
+          filesizelimit: 102400 # 100kb
