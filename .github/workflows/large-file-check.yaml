@@ -1,0 +1,36 @@
+name: Check for large files
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  check-large-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check for large files
+        run: |
+          # Iterate through all commits in the branch
+          for commit in $(git log --pretty=format:'%H' origin/master..HEAD); do
+            # Check all files in the commit
+            for file in $(git diff-tree --no-commit-id --name-only -r $commit); do
+              # If we cannot `git show` a file, its not in commit's tree and we need to
+              # show it in the previous commit
+              if git show $commit:$file 2>&1 | grep -q -E "fatal: path '.+' does not exist in '\w+'"; then
+                file_size=$(git show $commit~1:$file | wc -c)
+              else
+                file_size=$(git show $commit:$file | wc -c)
+              fi
+              # Check if file size is larger than 100kb
+              if [ $file_size -gt 100000 ]; then
+                echo "Error: File $file in commit $commit is larger than 100kb"
+                exit 1
+              fi
+            done
+          done
