@@ -1,7 +1,0 @@
-#!/bin/bash
-
-exit_code=0
-
-if ! ./scripts/pre-commit-prevent-large-files; then
-  exit_code = $?
-fi
